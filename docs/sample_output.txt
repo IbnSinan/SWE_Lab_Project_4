@@ -1,0 +1,59 @@
+===== Mini Text Editor (Command Pattern) =====
+
+--- Automatic demo ---
+   Executed : Write "Hello"
+   Text     : "Hello"
+   Executed : Write " RUET"
+   Text     : "Hello RUET"
+   Executed : Delete 4 char(s)
+   Text     : "Hello "
+
+[Undo]
+   Undone   : Delete 4 char(s)
+   Text     : "Hello RUET"
+[Undo]
+   Undone   : Write " RUET"
+   Text     : "Hello"
+[Redo]
+   Redone   : Write " RUET"
+   Text     : "Hello RUET"
+
+[New command clears redo history]
+   Executed : Write "!"
+   Text     : "Hello RUET!"
+[Redo]
+   Nothing to redo.
+
+[Invalid command]
+   [ERROR] Delete count must be at least 1.
+
+--- Interactive editor ---
+
+1) Write  2) Delete  3) Undo  4) Redo  0) Exit
+Choice: Text to write:    Executed : Write "Hi there"
+   Text     : "Hi there"
+   History  : 1 command(s)
+
+1) Write  2) Delete  3) Undo  4) Redo  0) Exit
+Choice: Characters to delete:    Executed : Delete 3 char(s)
+   Text     : "Hi th"
+   History  : 2 command(s)
+
+1) Write  2) Delete  3) Undo  4) Redo  0) Exit
+Choice:    Undone   : Delete 3 char(s)
+   Text     : "Hi there"
+   History  : 1 command(s)
+
+1) Write  2) Delete  3) Undo  4) Redo  0) Exit
+Choice:    Redone   : Delete 3 char(s)
+   Text     : "Hi th"
+   History  : 2 command(s)
+
+1) Write  2) Delete  3) Undo  4) Redo  0) Exit
+Choice:    Invalid choice.
+   Text     : "Hi th"
+   History  : 2 command(s)
+
+1) Write  2) Delete  3) Undo  4) Redo  0) Exit
+Choice: 
+Goodbye!

@@ -1,0 +1,60 @@
+@startuml command_class
+skinparam classAttributeIconSize 0
+skinparam defaultFontName Helvetica
+skinparam shadowing false
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #333333
+skinparam classArrowColor #333333
+title Command Pattern - Mini Text Editor with Undo/Redo
+
+interface Command <<Command>> {
+  + {abstract} execute() : void
+  + {abstract} undo() : void
+  + {abstract} describe() : string
+}
+
+class WriteCommand <<ConcreteCommand>> {
+  - editor : TextEditor&
+  - words : string
+  + execute() : void
+  + undo() : void
+  + describe() : string
+}
+
+class DeleteCommand <<ConcreteCommand>> {
+  - editor : TextEditor&
+  - count : size_t
+  - deletedText : string
+  + execute() : void
+  + undo() : void
+  + describe() : string
+}
+
+class TextEditor <<Receiver>> {
+  - text : string
+  + write(words : string) : void
+  + erase(count : size_t) : string
+  + getText() : string
+}
+
+class EditorInvoker <<Invoker>> {
+  - undoStack : stack<unique_ptr<Command>>
+  - redoStack : stack<unique_ptr<Command>>
+  + executeCommand(cmd : unique_ptr<Command>) : void
+  + undo() : void
+  + redo() : void
+  + historySize() : size_t
+}
+
+class "main()" as Client <<Client>>
+
+Command <|.. WriteCommand
+Command <|.. DeleteCommand
+EditorInvoker o--> "*" Command : history
+WriteCommand --> TextEditor
+DeleteCommand --> TextEditor
+Client ..> WriteCommand : creates
+Client ..> DeleteCommand : creates
+Client --> EditorInvoker : uses
+Client ..> TextEditor : creates
+@enduml

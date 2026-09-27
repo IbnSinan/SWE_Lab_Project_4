@@ -1,0 +1,26 @@
+@startuml command_sequence
+skinparam defaultFontName Helvetica
+skinparam shadowing false
+title Execution Flow - Write, then Undo, then Redo
+participant "main()\n(Client)" as C
+participant ":EditorInvoker" as I
+participant ":WriteCommand" as W
+participant ":TextEditor" as E
+C -> W ** : new WriteCommand(editor, " RUET")
+C -> I : executeCommand(cmd)
+I -> W : execute()
+W -> E : write(" RUET")
+I -> I : push cmd to undoStack\nclear redoStack
+== Undo ==
+C -> I : undo()
+I -> I : pop from undoStack
+I -> W : undo()
+W -> E : erase(5)
+I -> I : push cmd to redoStack
+== Redo ==
+C -> I : redo()
+I -> I : pop from redoStack
+I -> W : execute()
+W -> E : write(" RUET")
+I -> I : push cmd to undoStack
+@enduml
